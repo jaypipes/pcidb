@@ -6,16 +6,6 @@
 
 package pcidb
 
-import (
-	"regexp"
-)
-
-var (
-	RE_PCI_ADDRESS *regexp.Regexp = regexp.MustCompile(
-		"^(([0-9a-f]{0,4}):)?([0-9a-f]{2}):([0-9a-f]{2})\\.([0-9a-f]{1})$",
-	)
-)
-
 type PCIProgrammingInterface struct {
 	Id   string // hex-encoded PCI_ID of the programming interface
 	Name string // common string name for the programming interface

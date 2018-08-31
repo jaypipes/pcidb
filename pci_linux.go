@@ -13,10 +13,6 @@ import (
 	"strings"
 )
 
-const (
-	PATH_SYSFS_PCI_DEVICES = "/sys/bus/pci/devices"
-)
-
 var (
 	pciIdsFilePaths = []string{
 		"/usr/share/hwdata/pci.ids",
