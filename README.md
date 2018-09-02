@@ -6,9 +6,8 @@ product and class information
 ## Usage
 
 `pcidb` contains a PCI database inspection and querying facility that allows
-developers to not only gather information about devices on a local PCI bus but
-also query for information about hardware device classes, vendor and product
-information.
+developers to query for information about hardware device classes, vendor and
+product information.
 
 The `pcidb.New()` function returns a `pcidb.PCIDB` struct. The `pcidb.PCIDB`
 struct contains a number of fields that may be queried for PCI information:
