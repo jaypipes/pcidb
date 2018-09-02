@@ -1,4 +1,3 @@
-// +build linux
 //
 // Use and distribution licensed under the Apache license version 2.
 //
@@ -9,35 +8,8 @@ package pcidb
 
 import (
 	"bufio"
-	"os"
 	"strings"
 )
-
-var (
-	pciIdsFilePaths = []string{
-		"/usr/share/hwdata/pci.ids",
-		"/usr/share/misc/pci.ids",
-	}
-)
-
-func (db *PCIDB) load() error {
-	for _, fp := range pciIdsFilePaths {
-		if _, err := os.Stat(fp); err != nil {
-			continue
-		}
-		f, err := os.Open(fp)
-		if err != nil {
-			continue
-		}
-		defer f.Close()
-		scanner := bufio.NewScanner(f)
-		err = parsePCIIdsFile(db, scanner)
-		if err == nil {
-			break
-		}
-	}
-	return nil
-}
 
 func parsePCIIdsFile(db *PCIDB, scanner *bufio.Scanner) error {
 	inClassBlock := false
