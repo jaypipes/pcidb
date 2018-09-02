@@ -3,11 +3,14 @@ BIN_DIR := $(GOPATH)/bin
 DEP_BIN := $(BIN_DIR)/dep
 GOMETALINTER := $(BIN_DIR)/gometalinter
 
+dep-ensure: $(DEP_BIN)
+	$(DEP_BIN) ensure -v
+
 $(DEP_BIN):
 	curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 .PHONY: test
-test:
+test: dep-ensure
 	go test $(PKGS)
 
 $(GOMETALINTER):
