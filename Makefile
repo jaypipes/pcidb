@@ -14,7 +14,7 @@ $(DEP):
 
 .PHONY: dep
 dep: $(DEP)
-	@$(DEP) ensure
+	$(DEP) ensure
 
 $(GOMETALINTER):
 	go get -u github.com/alecthomas/gometalinter
@@ -22,7 +22,7 @@ $(GOMETALINTER):
 
 .PHONY: lint
 lint: $(GOMETALINTER)
-	@$(GOMETALINTER) ./... --vendor
+	$(GOMETALINTER) ./... --vendor
 
 .PHONY: fmt
 fmt:
@@ -34,7 +34,7 @@ fmtcheck:
 
 .PHONY: vet
 vet:
-	@go vet $(PKGS)
+	go vet $(PKGS)
 
 .PHONY: cover
 cover:
@@ -43,4 +43,4 @@ cover:
 	@$(foreach pkg,$(PKGS),\
 		go test -coverprofile=coverage.out -covermode=count $(pkg);\
 		tail -n +2 coverage.out >> coverage-all.out;)
-	@go tool cover -html=coverage-all.out -o=coverage-all.html
+	go tool cover -html=coverage-all.out -o=coverage-all.html
