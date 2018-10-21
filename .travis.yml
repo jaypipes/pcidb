@@ -1,3 +1,11 @@
 language: go
+os:
+  - windows
+  - linux
+install:
+  - go get -u github.com/golang/dep/cmd/dep
+before_script:
+  - dep ensure -v
+  - source ./.get-go-packages.sh
 script:
-  - make test
+  - go test -v $GO_PACKAGES
