@@ -40,7 +40,7 @@ func TestPCI(t *testing.T) {
 
 	var firewireSubclass *pcidb.PCISubclass
 	for _, sc := range sbController.Subclasses {
-		if sc.Id == "00" {
+		if sc.ID == "00" {
 			firewireSubclass = sc
 		}
 	}
@@ -54,7 +54,7 @@ func TestPCI(t *testing.T) {
 	}
 	var ohciIface *pcidb.PCIProgrammingInterface
 	for _, progIface := range firewireSubclass.ProgrammingInterfaces {
-		if progIface.Id == "10" {
+		if progIface.ID == "10" {
 			ohciIface = progIface
 		}
 	}
@@ -89,14 +89,14 @@ func TestPCI(t *testing.T) {
 	if intel10GBackplane.Name != "82599 10 Gigabit Dual Port Backplane Connection" {
 		t.Fatalf("Expected Intel product '10f8' to have name '82599 10 Gigabit Dual Port Backplane Connection' but got %v", intel10GBackplane.Name)
 	}
-	if intel10GBackplane.VendorId != "8086" {
-		t.Fatalf("Expected Intel product '10f8' to have vendor ID of '8086' but got '%v'", intel10GBackplane.VendorId)
+	if intel10GBackplane.VendorID != "8086" {
+		t.Fatalf("Expected Intel product '10f8' to have vendor ID of '8086' but got '%v'", intel10GBackplane.VendorID)
 	}
 
 	// Make sure this product is linked in the Intel PCIVendor.Products array
 	foundBackplane := false
 	for _, prod := range intelInc.Products {
-		if prod.Id == "10f8" {
+		if prod.ID == "10f8" {
 			foundBackplane = true
 		}
 	}
@@ -122,7 +122,7 @@ func TestPCI(t *testing.T) {
 	}
 	foundNetRaid := false
 	for _, subsystem := range megaRaidProd.Subsystems {
-		if subsystem.VendorId == "103c" && subsystem.Id == "60e7" {
+		if subsystem.VendorID == "103c" && subsystem.ID == "60e7" {
 			foundNetRaid = true
 		}
 	}
