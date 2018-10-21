@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func parsePCIIdsFile(db *PCIDB, scanner *bufio.Scanner) error {
+func parseDBFile(db *PCIDB, scanner *bufio.Scanner) error {
 	inClassBlock := false
 	db.Classes = make(map[string]*PCIClass, 20)
 	db.Vendors = make(map[string]*PCIVendor, 200)
@@ -45,14 +45,16 @@ func parsePCIIdsFile(db *PCIDB, scanner *bufio.Scanner) error {
 				subclasses = make([]*PCISubclass, 0)
 			}
 			inClassBlock = true
-			classId := string(lineBytes[2:4])
+			classID := string(lineBytes[2:4])
 			className := string(lineBytes[6:])
 			curClass = &PCIClass{
-				Id:         classId,
+				// TODO)jaypipes): REMOVE in 1.0
+				Id:         classID,
+				ID:         classID,
 				Name:       className,
 				Subclasses: subclasses,
 			}
-			db.Classes[curClass.Id] = curClass
+			db.Classes[curClass.ID] = curClass
 			continue
 		}
 
@@ -68,14 +70,16 @@ func parsePCIIdsFile(db *PCIDB, scanner *bufio.Scanner) error {
 				vendorProducts = make([]*PCIProduct, 0)
 			}
 			inClassBlock = false
-			vendorId := string(lineBytes[0:4])
+			vendorID := string(lineBytes[0:4])
 			vendorName := string(lineBytes[6:])
 			curVendor = &PCIVendor{
-				Id:       vendorId,
+				// TODO)jaypipes): REMOVE in 1.0
+				Id:       vendorID,
+				ID:       vendorID,
 				Name:     vendorName,
 				Products: vendorProducts,
 			}
-			db.Vendors[curVendor.Id] = curVendor
+			db.Vendors[curVendor.ID] = curVendor
 			continue
 		}
 
@@ -99,10 +103,10 @@ func parsePCIIdsFile(db *PCIDB, scanner *bufio.Scanner) error {
 					curSubclass.ProgrammingInterfaces = progIfaces
 					progIfaces = make([]*PCIProgrammingInterface, 0)
 				}
-				subclassId := string(lineBytes[1:3])
+				subclassID := string(lineBytes[1:3])
 				subclassName := string(lineBytes[5:])
 				curSubclass = &PCISubclass{
-					Id:   subclassId,
+					ID:   subclassID,
 					Name: subclassName,
 					ProgrammingInterfaces: progIfaces,
 				}
@@ -113,13 +117,17 @@ func parsePCIIdsFile(db *PCIDB, scanner *bufio.Scanner) error {
 					curProduct.Subsystems = productSubsystems
 					productSubsystems = make([]*PCIProduct, 0)
 				}
-				productId := string(lineBytes[1:5])
+				productID := string(lineBytes[1:5])
 				productName := string(lineBytes[7:])
-				productKey := curVendor.Id + productId
+				productKey := curVendor.ID + productID
 				curProduct = &PCIProduct{
-					VendorId: curVendor.Id,
-					Id:       productId,
-					Name:     productName,
+					// TODO)jaypipes): REMOVE in 1.0
+					VendorId: curVendor.ID,
+					VendorID: curVendor.ID,
+					// TODO)jaypipes): REMOVE in 1.0
+					Id:   productID,
+					ID:   productID,
+					Name: productName,
 				}
 				vendorProducts = append(vendorProducts, curProduct)
 				db.Products[productKey] = curProduct
@@ -139,21 +147,25 @@ func parsePCIIdsFile(db *PCIDB, scanner *bufio.Scanner) error {
 			//
 			// \t\t0e11 4091  Smart Array 6i
 			if inClassBlock {
-				progIfaceId := string(lineBytes[2:4])
+				progIfaceID := string(lineBytes[2:4])
 				progIfaceName := string(lineBytes[6:])
 				curProgIface = &PCIProgrammingInterface{
-					Id:   progIfaceId,
+					ID:   progIfaceID,
 					Name: progIfaceName,
 				}
 				progIfaces = append(progIfaces, curProgIface)
 			} else {
-				vendorId := string(lineBytes[2:6])
-				subsystemId := string(lineBytes[7:11])
+				vendorID := string(lineBytes[2:6])
+				subsystemID := string(lineBytes[7:11])
 				subsystemName := string(lineBytes[13:])
 				curSubsystem = &PCIProduct{
-					VendorId: vendorId,
-					Id:       subsystemId,
-					Name:     subsystemName,
+					// TODO)jaypipes): REMOVE in 1.0
+					VendorId: vendorID,
+					VendorID: vendorID,
+					// TODO)jaypipes): REMOVE in 1.0
+					Id:   subsystemID,
+					ID:   subsystemID,
+					Name: subsystemName,
 				}
 				productSubsystems = append(productSubsystems, curSubsystem)
 			}

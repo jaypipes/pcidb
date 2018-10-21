@@ -42,7 +42,7 @@ func (db *PCIDB) load() error {
 	if foundPath == "" {
 		// OK, so we didn't find any host-local copy of the pci-ids DB file. Let's
 		// try fetching it from the network and storing it
-		if err := cachePCIIdsFile(cachePath); err != nil {
+		if err := cacheDBFile(cachePath); err != nil {
 			return err
 		}
 		foundPath = cachePath
@@ -53,7 +53,7 @@ func (db *PCIDB) load() error {
 	}
 	defer f.Close()
 	scanner := bufio.NewScanner(f)
-	return parsePCIIdsFile(db, scanner)
+	return parseDBFile(db, scanner)
 }
 
 func cachePath() string {
@@ -108,7 +108,7 @@ func ensureDir(fp string) error {
 
 // Pulls down the latest copy of the pci-ids file from the network and stores
 // it in the local host filesystem
-func cachePCIIdsFile(cacheFilePath string) error {
+func cacheDBFile(cacheFilePath string) error {
 	ensureDir(cacheFilePath)
 
 	response, err := http.Get(PCIIDS_URI)

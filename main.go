@@ -7,18 +7,27 @@
 package pcidb
 
 type PCIProgrammingInterface struct {
-	Id   string // hex-encoded PCI_ID of the programming interface
+	// Id is DEPRECATED in 0.2 and will be removed in the 1.0 release. Please
+	// use the equivalent ID field.
+	Id   string
+	ID   string // hex-encoded PCI_ID of the programming interface
 	Name string // common string name for the programming interface
 }
 
 type PCISubclass struct {
-	Id                    string                     // hex-encoded PCI_ID for the device subclass
+	// Id is DEPRECATED in 0.2 and will be removed in the 1.0 release. Please
+	// use the equivalent ID field.
+	Id                    string
+	ID                    string                     // hex-encoded PCI_ID for the device subclass
 	Name                  string                     // common string name for the subclass
 	ProgrammingInterfaces []*PCIProgrammingInterface // any programming interfaces this subclass might have
 }
 
 type PCIClass struct {
-	Id         string         // hex-encoded PCI_ID for the device class
+	// Id is DEPRECATED in 0.2 and will be removed in the 1.0 release. Please
+	// use the equivalent ID field.
+	Id         string
+	ID         string         // hex-encoded PCI_ID for the device class
 	Name       string         // common string name for the class
 	Subclasses []*PCISubclass // any subclasses belonging to this class
 }
@@ -26,14 +35,23 @@ type PCIClass struct {
 // NOTE(jaypipes): In the hardware world, the PCI "device_id" is the identifier
 // for the product/model
 type PCIProduct struct {
-	VendorId   string        // vendor ID for the product
-	Id         string        // hex-encoded PCI_ID for the product/model
+	// VendorId is DEPRECATED in 0.2 and will be removed in the 1.0 release. Please
+	// use the equivalent VendorID field.
+	VendorId string
+	VendorID string // vendor ID for the product
+	// Id is DEPRECATED in 0.2 and will be removed in the 1.0 release. Please
+	// use the equivalent ID field.
+	Id         string
+	ID         string        // hex-encoded PCI_ID for the product/model
 	Name       string        // common string name of the vendor
 	Subsystems []*PCIProduct // "subdevices" or "subsystems" for the product
 }
 
 type PCIVendor struct {
-	Id       string        // hex-encoded PCI_ID for the vendor
+	// Id is DEPRECATED in 0.2 and will be removed in the 1.0 release. Please
+	// use the equivalent ID field.
+	Id       string
+	ID       string        // hex-encoded PCI_ID for the vendor
 	Name     string        // common string name of the vendor
 	Products []*PCIProduct // all top-level devices for the vendor
 }
