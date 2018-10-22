@@ -3,7 +3,7 @@
 `pcidb` is a small Golang library for programmatic querying of PCI vendor,
 product and class information.
 
-We currently [test](https://travis-ci.org/jaypipes/pcidb/) `pcidb` on Linux and Windows.
+We currently [test](https://travis-ci.org/jaypipes/pcidb/) `pcidb` on Linux, Windows and MacOSX.
 
 ## Usage
 
