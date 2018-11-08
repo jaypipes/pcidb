@@ -91,7 +91,7 @@ func addSearchPaths(paths *[]string) {
 	}
 
 	rootPath := "/"
-	if val, exists := os.LookupEnv("GHW_CHROOT"); exists {
+	if val, exists := os.LookupEnv("PCIDB_CHROOT"); exists {
 		rootPath = val
 	}
 
