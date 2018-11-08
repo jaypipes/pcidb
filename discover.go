@@ -89,9 +89,15 @@ func addSearchPaths(paths []string) {
 			return
 		}
 	}
+
+	rootPath := "/"
+	if val, exists := os.LookupEnv("GHW_CHROOT"); exists {
+		rootPath = val
+	}
+
 	if runtime.GOOS != "windows" {
-		paths = append(paths, "/usr/share/hwdata/pci.ids")
-		paths = append(paths, "/usr/share/misc/pci.ids")
+		paths = append(paths, filepath.Join(rootPath, "usr", "share", "hwdata", "pci.ids"))
+		paths = append(paths, filepath.Join(rootPath, "usr", "share", "misc", "pci.ids"))
 	}
 }
 
