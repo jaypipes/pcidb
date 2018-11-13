@@ -15,7 +15,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strconv"
 
 	homedir "github.com/mitchellh/go-homedir"
 )
@@ -24,13 +23,13 @@ const (
 	PCIIDS_URI = "https://pci-ids.ucw.cz/v2.2/pci.ids.gz"
 )
 
-func (db *PCIDB) load() error {
+func (db *PCIDB) load(opts *options) error {
 	cachePath := cachePath()
 	// A set of filepaths we will first try to search for the pci-ids DB file
 	// on the local machine. If we fail to find one, we'll try pulling the
 	// latest pci-ids file from the network
 	paths := []string{cachePath}
-	addSearchPaths(&paths)
+	addSearchPaths(opts, &paths)
 	var foundPath string
 	for _, fp := range paths {
 		if _, err := os.Stat(fp); err == nil {
@@ -72,28 +71,12 @@ func cachePath() string {
 
 // Depending on the operating system, returns a set of local filepaths to
 // search for a pci.ids database file
-func addSearchPaths(paths *[]string) {
-	// The PCIDB_CACHE_ONLY environs variable is mostly just useful for
-	// testing. It essentially disables looking for any non ~/.cache/pci.ids
-	// filepaths (which is useful when we want to test the fetch-from-network
-	// code paths
-	if val, exists := os.LookupEnv("PCIDB_CACHE_ONLY"); exists {
-		if parsed, err := strconv.ParseBool(val); err != nil {
-			fmt.Fprintf(
-				os.Stderr,
-				"Failed parsing a bool from PCIDB_CACHE_LOCAL_ONLY "+
-					"environ value of %s",
-				val,
-			)
-		} else if parsed {
-			return
-		}
+func addSearchPaths(opts *options, paths *[]string) {
+	if opts.cacheOnly {
+		return
 	}
 
-	rootPath := "/"
-	if val, exists := os.LookupEnv("PCIDB_CHROOT"); exists {
-		rootPath = val
-	}
+	rootPath := opts.chroot
 
 	if runtime.GOOS != "windows" {
 		*paths = append(*paths, filepath.Join(rootPath, "usr", "share", "hwdata", "pci.ids"))
