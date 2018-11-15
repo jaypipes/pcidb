@@ -38,7 +38,7 @@ func TestPCI(t *testing.T) {
 		t.Fatalf("Expected >0 Subclasses for sbController, but found 0.")
 	}
 
-	var firewireSubclass *pcidb.PCISubclass
+	var firewireSubclass *pcidb.Subclass
 	for _, sc := range sbController.Subclasses {
 		if sc.ID == "00" {
 			firewireSubclass = sc
@@ -52,7 +52,7 @@ func TestPCI(t *testing.T) {
 	if len(firewireSubclass.ProgrammingInterfaces) == 0 {
 		t.Fatalf("Expected >0 Firewire programming interfaces, but found 0.")
 	}
-	var ohciIface *pcidb.PCIProgrammingInterface
+	var ohciIface *pcidb.ProgrammingInterface
 	for _, progIface := range firewireSubclass.ProgrammingInterfaces {
 		if progIface.ID == "10" {
 			ohciIface = progIface
