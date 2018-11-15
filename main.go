@@ -82,13 +82,6 @@ func WithCacheOnly() *WithOption {
 	return &WithOption{CacheOnly: &cacheOnlyTrue}
 }
 
-// Concrete merged set of configuration switches that get passed to pcidb
-// internal functions
-type options struct {
-	chroot    string
-	cacheOnly bool
-}
-
 func mergeOptions(opts ...*WithOption) *WithOption {
 	// Grab options from the environs by default
 	defaultChroot := "/"
@@ -108,23 +101,23 @@ func mergeOptions(opts ...*WithOption) *WithOption {
 			defaultCacheOnly = parsed
 		}
 	}
-	mergeOpts := &WithOption{}
+	merged := &WithOption{}
 	for _, opt := range opts {
 		if opt.Chroot != nil {
-			mergeOpts.Chroot = opt.Chroot
+			merged.Chroot = opt.Chroot
 		}
 		if opt.CacheOnly != nil {
-			mergeOpts.CacheOnly = opt.CacheOnly
+			merged.CacheOnly = opt.CacheOnly
 		}
 	}
-	// Set the default value if missing from mergeOpts
-	if mergeOpts.Chroot == nil {
-		mergeOpts.Chroot = &defaultChroot
+	// Set the default value if missing from merged
+	if merged.Chroot == nil {
+		merged.Chroot = &defaultChroot
 	}
-	if mergeOpts.CacheOnly == nil {
-		mergeOpts.CacheOnly = &defaultCacheOnly
+	if merged.CacheOnly == nil {
+		merged.CacheOnly = &defaultCacheOnly
 	}
-	return mergeOpts
+	return merged
 }
 
 // New returns a pointer to a PCIDB struct which contains information you can
@@ -134,13 +127,8 @@ func mergeOptions(opts ...*WithOption) *WithOption {
 // change the root directory that pcidb uses when discovering pciids DB files,
 // call New(WithChroot("/my/root/override"))
 func New(opts ...*WithOption) (*PCIDB, error) {
-	mergeOpts := mergeOptions(opts...)
-	useOpts := &options{
-		chroot:    *mergeOpts.Chroot,
-		cacheOnly: *mergeOpts.CacheOnly,
-	}
-
+	ctx := contextFromOptions(mergeOptions(opts...))
 	db := &PCIDB{}
-	err := db.load(useOpts)
+	err := db.load(ctx)
 	return db, err
 }
