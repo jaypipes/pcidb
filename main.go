@@ -19,48 +19,63 @@ var (
 // ProgrammingInterface is the PCI programming interface for a class of PCI
 // devices
 type ProgrammingInterface struct {
-	ID   string // hex-encoded PCI_ID of the programming interface
-	Name string // common string name for the programming interface
+	// hex-encoded PCI_ID of the programming interface
+	ID string `json:"id"`
+	// common string name for the programming interface
+	Name string `json:"name"`
 }
 
 // Subclass is a subdivision of a PCI class
 type Subclass struct {
-	ID                    string                  // hex-encoded PCI_ID for the device subclass
-	Name                  string                  // common string name for the subclass
-	ProgrammingInterfaces []*ProgrammingInterface // any programming interfaces this subclass might have
+	// hex-encoded PCI_ID for the device subclass
+	ID string `json:"id"`
+	// common string name for the subclass
+	Name string `json:"name"`
+	// any programming interfaces this subclass might have
+	ProgrammingInterfaces []*ProgrammingInterface `json:"programming_interfaces"`
 }
 
 // Class is the PCI class
 type Class struct {
-	ID         string      // hex-encoded PCI_ID for the device class
-	Name       string      // common string name for the class
-	Subclasses []*Subclass // any subclasses belonging to this class
+	// hex-encoded PCI_ID for the device class
+	ID string `json:"id"`
+	// common string name for the class
+	Name string `json:"name"`
+	// any subclasses belonging to this class
+	Subclasses []*Subclass `json:"subclasses"`
 }
 
 // Product provides information about a PCI device model
 // NOTE(jaypipes): In the hardware world, the PCI "device_id" is the identifier
 // for the product/model
 type Product struct {
-	VendorID   string     // vendor ID for the product
-	ID         string     // hex-encoded PCI_ID for the product/model
-	Name       string     // common string name of the vendor
-	Subsystems []*Product // "subdevices" or "subsystems" for the product
+	// vendor ID for the product
+	VendorID string `json:"vendor_id"`
+	// hex-encoded PCI_ID for the product/model
+	ID string `json:"id"`
+	// common string name of the vendor
+	Name string `json:"name"`
+	// "subdevices" or "subsystems" for the product
+	Subsystems []*Product `json:"subsystems"`
 }
 
 // Vendor provides information about a device vendor
 type Vendor struct {
-	ID       string     // hex-encoded PCI_ID for the vendor
-	Name     string     // common string name of the vendor
-	Products []*Product // all top-level devices for the vendor
+	// hex-encoded PCI_ID for the vendor
+	ID string `json:"id"`
+	// common string name of the vendor
+	Name string `json:"name"`
+	// all top-level devices for the vendor
+	Products []*Product `json:"products"`
 }
 
 type PCIDB struct {
 	// hash of class ID -> class information
-	Classes map[string]*Class
+	Classes map[string]*Class `json:"classes"`
 	// hash of vendor ID -> vendor information
-	Vendors map[string]*Vendor
+	Vendors map[string]*Vendor `json:"vendors"`
 	// hash of vendor ID + product/device ID -> product information
-	Products map[string]*Product
+	Products map[string]*Product `json:"products"`
 }
 
 // WithOption is used to represent optionally-configured settings
