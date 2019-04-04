@@ -15,6 +15,8 @@ type context struct {
 	chroot      string
 	cacheOnly   bool
 	cachePath   string
+	path        string
+	localOnly   bool
 	searchPaths []string
 }
 
@@ -22,6 +24,8 @@ func contextFromOptions(merged *WithOption) *context {
 	ctx := &context{
 		chroot:      *merged.Chroot,
 		cacheOnly:   *merged.CacheOnly,
+		path:        *merged.Path,
+		localOnly:   *merged.LocalOnly,
 		cachePath:   getCachePath(),
 		searchPaths: make([]string, 0),
 	}
@@ -53,6 +57,8 @@ func (ctx *context) setSearchPaths() {
 	if ctx.cacheOnly {
 		return
 	}
+
+	ctx.searchPaths = append(ctx.searchPaths, ctx.path)
 
 	rootPath := ctx.chroot
 

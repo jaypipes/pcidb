@@ -9,11 +9,13 @@ package pcidb
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
 var (
 	cacheOnlyTrue = true
+	localOnlyTrue = true
 )
 
 // ProgrammingInterface is the PCI programming interface for a class of PCI
@@ -87,6 +89,11 @@ type WithOption struct {
 	// looking for any non ~/.cache/pci.ids filepaths (which is useful when we
 	// want to test the fetch-from-network code paths
 	CacheOnly *bool
+	// Path provides a search path directly to find pci.ids or pci.ids
+	Path *string
+	// LocalOnly disables any fetch-from-network capability, for use in
+	// environments were it is undesirable
+	LocalOnly *bool
 }
 
 func WithChroot(dir string) *WithOption {
@@ -95,6 +102,14 @@ func WithChroot(dir string) *WithOption {
 
 func WithCacheOnly() *WithOption {
 	return &WithOption{CacheOnly: &cacheOnlyTrue}
+}
+
+func WithPath(path string) *WithOption {
+	return &WithOption{Path: &path}
+}
+
+func WithLocalOnly() *WithOption {
+	return &WithOption{LocalOnly: &localOnlyTrue}
 }
 
 func mergeOptions(opts ...*WithOption) *WithOption {
@@ -116,6 +131,25 @@ func mergeOptions(opts ...*WithOption) *WithOption {
 			defaultCacheOnly = parsed
 		}
 	}
+	defaultPath := filepath.Join(defaultChroot, "usr", "share", "hwdata", "pci.ids")
+	if val, exists := os.LookupEnv("PCIDB_PATH"); exists {
+		defaultChroot = "/"
+		defaultPath = val
+	}
+	defaultLocalOnly := false
+	if val, exists := os.LookupEnv("PCIDB_LOCAL_ONLY"); exists {
+		if parsed, err := strconv.ParseBool(val); err != nil {
+			fmt.Fprintf(
+				os.Stderr,
+				"Failed parsing a bool from PCIDB_LOCAL_ONLY "+
+					"environ value of %s",
+				val,
+			)
+		} else if parsed {
+			defaultLocalOnly = parsed
+		}
+	}
+
 	merged := &WithOption{}
 	for _, opt := range opts {
 		if opt.Chroot != nil {
@@ -123,6 +157,12 @@ func mergeOptions(opts ...*WithOption) *WithOption {
 		}
 		if opt.CacheOnly != nil {
 			merged.CacheOnly = opt.CacheOnly
+		}
+		if opt.Path != nil {
+			merged.Path = opt.Path
+		}
+		if opt.LocalOnly != nil {
+			merged.LocalOnly = opt.LocalOnly
 		}
 	}
 	// Set the default value if missing from merged
@@ -132,6 +172,13 @@ func mergeOptions(opts ...*WithOption) *WithOption {
 	if merged.CacheOnly == nil {
 		merged.CacheOnly = &defaultCacheOnly
 	}
+	if merged.Path == nil {
+		merged.Path = &defaultPath
+	}
+	if merged.LocalOnly == nil {
+		merged.LocalOnly = &defaultLocalOnly
+	}
+
 	return merged
 }
 
