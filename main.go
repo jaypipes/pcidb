@@ -93,6 +93,9 @@ type WithOption struct {
 	// Useful for secure environments or environments with no network
 	// connectivity.
 	DisableNetworkFetch *bool
+	// Path points to the absolute path of a pci.ids file in a non-standard
+	// location.
+	Path *string
 }
 
 func WithChroot(dir string) *WithOption {
@@ -101,6 +104,10 @@ func WithChroot(dir string) *WithOption {
 
 func WithCacheOnly() *WithOption {
 	return &WithOption{CacheOnly: &trueVar}
+}
+
+func WithDirectPath(path string) *WithOption {
+	return &WithOption{Path: &path}
 }
 
 func WithDisableNetworkFetch() *WithOption {
@@ -112,6 +119,10 @@ func mergeOptions(opts ...*WithOption) *WithOption {
 	defaultChroot := "/"
 	if val, exists := os.LookupEnv("PCIDB_CHROOT"); exists {
 		defaultChroot = val
+	}
+	path := ""
+	if val, exists := os.LookupEnv("PCIDB_PATH"); exists {
+		path = val
 	}
 	defaultCacheOnly := false
 	if val, exists := os.LookupEnv("PCIDB_CACHE_ONLY"); exists {
@@ -151,6 +162,9 @@ func mergeOptions(opts ...*WithOption) *WithOption {
 		if opt.DisableNetworkFetch != nil {
 			merged.DisableNetworkFetch = opt.DisableNetworkFetch
 		}
+		if opt.Path != nil {
+			merged.Path = opt.Path
+		}
 	}
 	// Set the default value if missing from merged
 	if merged.Chroot == nil {
@@ -161,6 +175,9 @@ func mergeOptions(opts ...*WithOption) *WithOption {
 	}
 	if merged.DisableNetworkFetch == nil {
 		merged.DisableNetworkFetch = &defaultDisableNetworkFetch
+	}
+	if merged.Path == nil {
+		merged.Path = &path
 	}
 	return merged
 }
