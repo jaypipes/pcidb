@@ -17,6 +17,7 @@ import (
 
 const (
 	PCIIDS_URI = "https://pci-ids.ucw.cz/v2.2/pci.ids.gz"
+	USER_AGENT = "golang-jaypipes-pcidb"
 )
 
 func (db *PCIDB) load(ctx *context) error {
@@ -63,7 +64,13 @@ func ensureDir(fp string) error {
 func cacheDBFile(cacheFilePath string) error {
 	ensureDir(cacheFilePath)
 
-	response, err := http.Get(PCIIDS_URI)
+	client := new(http.Client)
+	request, err := http.NewRequest("GET", PCIIDS_URI, nil)
+	if err != nil {
+		return err
+	}
+	request.Header.Set("User-Agent", USER_AGENT)
+	response, err := client.Do(request)
 	if err != nil {
 		return err
 	}
