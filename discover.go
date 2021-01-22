@@ -72,6 +72,11 @@ func cacheDBFile(cacheFilePath string) error {
 	if err != nil {
 		return err
 	}
+	defer func() {
+		if err != nil {
+			os.Remove(cacheFilePath)
+		}
+	}()
 	defer f.Close()
 	// write the gunzipped contents to our local cache file
 	zr, err := gzip.NewReader(response.Body)
