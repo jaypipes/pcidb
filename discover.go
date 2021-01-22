@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 const (
@@ -43,7 +44,19 @@ func (db *PCIDB) load(ctx *context) error {
 		return err
 	}
 	defer f.Close()
-	scanner := bufio.NewScanner(f)
+
+	var scanner *bufio.Scanner
+	if strings.HasSuffix(foundPath, ".gz") {
+		var zipReader *gzip.Reader
+		if zipReader, err = gzip.NewReader(f); err != nil {
+			return err
+		}
+		defer zipReader.Close()
+		scanner = bufio.NewScanner(zipReader)
+	} else {
+		scanner = bufio.NewScanner(f)
+	}
+
 	return parseDBFile(db, scanner)
 }
 

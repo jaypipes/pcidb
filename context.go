@@ -67,5 +67,13 @@ func (ctx *context) setSearchPaths() {
 			ctx.searchPaths,
 			filepath.Join(rootPath, "usr", "share", "misc", "pci.ids"),
 		)
+		ctx.searchPaths = append(
+			ctx.searchPaths,
+			filepath.Join(rootPath, "usr", "share", "hwdata", "pci.ids.gz"),
+		)
+		ctx.searchPaths = append(
+			ctx.searchPaths,
+			filepath.Join(rootPath, "usr", "share", "misc", "pci.ids.gz"),
+		)
 	}
 }
