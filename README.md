@@ -1,9 +1,9 @@
-# `pcidb` - the Golang PCI DB library [![Build Status](https://travis-ci.org/jaypipes/pcidb.svg?branch=master)](https://travis-ci.org/jaypipes/pcidb)
+# `pcidb` - the Golang PCI DB library [![Build Status](https://travis-ci.com/jaypipes/pcidb.svg?branch=master)](https://travis-ci.com/jaypipes/pcidb)
 
 `pcidb` is a small Golang library for programmatic querying of PCI vendor,
 product and class information.
 
-We currently [test](https://travis-ci.org/jaypipes/pcidb/) `pcidb` on Linux, Windows and MacOSX.
+We currently [test](https://travis-ci.com/jaypipes/pcidb/) `pcidb` on Linux, Windows and MacOSX.
 
 ## Usage
 

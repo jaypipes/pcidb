@@ -1,48 +1,23 @@
 language: go
 script:
-  - source ./.get-go-packages.sh
-  - go test -v $GO_PACKAGES
+  - go test -v ./...
 matrix:
   include:
-    # On Go 1.10 and Go 1.11, use dep to ensure dependencies before running go
-    # test.
     - os: windows
-      go: "1.10"
-      install:
-        - go get -u github.com/golang/dep/cmd/dep
-        - dep ensure -v
+      go: "1.15"
     - os: linux
-      go: "1.10"
-      install:
-        - go get -u github.com/golang/dep/cmd/dep
-        - dep ensure -v
+      go: "1.15"
     - os: osx
-      go: "1.10"
-      install:
-        - go get -u github.com/golang/dep/cmd/dep
-        - dep ensure -v
+      go: "1.15"
     - os: windows
-      go: "1.11"
-      install:
-        - go get -u github.com/golang/dep/cmd/dep
-        - dep ensure -v
+      go: "1.16"
     - os: linux
-      go: "1.11"
-      install:
-        - go get -u github.com/golang/dep/cmd/dep
-        - dep ensure -v
+      go: "1.16"
     - os: osx
-      go: "1.11"
-      install:
-        - go get -u github.com/golang/dep/cmd/dep
-        - dep ensure -v
-    # On Go 1.12, use go modules to ensure dependencies instead of dep
+      go: "1.16"
     - os: windows
-      go: "1.12"
-      env: GO111MODULE=on
+      go: "1.17"
     - os: linux
-      go: "1.12"
-      env: GO111MODULE=on
+      go: "1.17"
     - os: osx
-      go: "1.12"
-      env: GO111MODULE=on
+      go: "1.17"
