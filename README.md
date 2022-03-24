@@ -16,10 +16,10 @@ PCI database could not be loaded.
 
 > `pcidb`'s default behaviour is to first search for pci-ids DB files on the
 > local host system in well-known filesystem paths. If `pcidb` cannot find a
-> pci-ids DB file on the local host system, it will then fetch a current
-> pci-ids DB file from the network. You can disable this network-fetching
-> behaviour with the `pcidb.WithDisableNetworkFetch()` function or set the
-> `PCIDB_DISABLE_NETWORK_FETCH` to a non-0 value.
+> pci-ids DB file on the local host system, you can configure `pcidb` to fetch
+> a current pci-ids DB file from the network. You can enable this
+> network-fetching behaviour with the `pcidb.WithEnableNetworkFetch()` function
+> or set the `PCIDB_ENABLE_NETWORK_FETCH` to a non-0 value.
 
 The `pcidb.PCIDB` struct contains a number of fields that may be queried for
 PCI information:
