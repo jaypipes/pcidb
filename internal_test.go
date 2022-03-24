@@ -19,8 +19,8 @@ func TestMergeOptions(t *testing.T) {
 	if opts.CacheOnly == nil {
 		t.Fatalf("Expected opts.CacheOnly to be non-nil.")
 	}
-	if opts.DisableNetworkFetch == nil {
-		t.Fatalf("Expected opts.DisableNetworkFetch to be non-nil.")
+	if opts.EnableNetworkFetch == nil {
+		t.Fatalf("Expected opts.EnableNetworkFetch to be non-nil.")
 	}
 	if opts.Path == nil {
 		t.Fatalf("Expected opts.DirectPath to be non-nil.")
@@ -46,8 +46,8 @@ func TestLoad(t *testing.T) {
 	// Start with a context with no search paths intentionally to test the
 	// disabling of the network fetch
 	ctx := &context{
-		disableNetworkFetch: true,
-		searchPaths:         []string{},
+		enableNetworkFetch: false,
+		searchPaths:        []string{},
 	}
 	db := &PCIDB{}
 	err := db.load(ctx)
