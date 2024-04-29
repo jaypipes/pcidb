@@ -117,9 +117,10 @@ func parseDBFile(db *PCIDB, scanner *bufio.Scanner) error {
 				productName := string(lineBytes[7:])
 				productKey := curVendor.ID + productID
 				curProduct = &Product{
-					VendorID: curVendor.ID,
-					ID:       productID,
-					Name:     productName,
+					VendorID:   curVendor.ID,
+					VendorName: curVendor.Name,
+					ID:         productID,
+					Name:       productName,
 				}
 				vendorProducts = append(vendorProducts, curProduct)
 				db.Products[productKey] = curProduct
@@ -147,13 +148,21 @@ func parseDBFile(db *PCIDB, scanner *bufio.Scanner) error {
 				}
 				progIfaces = append(progIfaces, curProgIface)
 			} else {
+				var vendorName string
+				if curVendor != nil {
+					vendorName = curVendor.Name
+				} else {
+					vendorName = "unknown"
+				}
+				
 				vendorID := string(lineBytes[2:6])
 				subsystemID := string(lineBytes[7:11])
 				subsystemName := string(lineBytes[13:])
 				curSubsystem = &Product{
-					VendorID: vendorID,
-					ID:       subsystemID,
-					Name:     subsystemName,
+					VendorID:   vendorID,
+					VendorName: vendorName,
+					ID:         subsystemID,
+					Name:       subsystemName,
 				}
 				productSubsystems = append(productSubsystems, curSubsystem)
 			}

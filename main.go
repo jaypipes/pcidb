@@ -52,6 +52,8 @@ type Class struct {
 type Product struct {
 	// vendor ID for the product
 	VendorID string `json:"vendor_id"`
+	// vendor name for the product
+	VendorName string `json:"vendor_name"`
 	// hex-encoded PCI_ID for the product/model
 	ID string `json:"id"`
 	// common string name of the vendor
