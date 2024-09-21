@@ -12,6 +12,12 @@ import (
 )
 
 type DB = types.DB
+type Product = types.Product
+type Vendor = types.Vendor
+type Class = types.Class
+type Subclass = types.Subclass
+type ProgrammingInterface = types.ProgrammingInterface
+type WithOption = types.WithOption
 
 // Backward-compat, please refer to the pcidb types.DB type definition
 type PCIDB = types.DB
@@ -27,9 +33,9 @@ type PCIDB = types.DB
 // pciids DB files, call New(WithChroot("/my/root/override"))
 func New(opts ...*types.WithOption) (*types.DB, error) {
 	merged := internal.MergeOptions(opts...)
-	scanner, err := internal.Discover(merged)
+	f, err := internal.Discover(merged)
 	if err != nil {
 		return nil, err
 	}
-	return internal.FromScanner(scanner), nil
+	return internal.FromReader(f), nil
 }

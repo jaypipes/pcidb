@@ -14,10 +14,10 @@ import (
 	"github.com/jaypipes/pcidb/types"
 )
 
-// FromFile reads the supplied filepath representing a PCIIDS database file or
-// gzipped database file and returns a populated pcidb.DB with parsed PCI
-// product, vendor and class information.
-func FromScanner(
+// FromReader reads the supplied io.ReadCloser representing a PCIIDS database
+// file or gzipped database file and returns a populated pcidb.DB with parsed
+// PCI product, vendor and class information.
+func FromReader(
 	f io.ReadCloser,
 ) *types.DB {
 	defer f.Close()
