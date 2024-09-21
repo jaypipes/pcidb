@@ -4,15 +4,17 @@
 // See the COPYING file in the root project directory for full text.
 //
 
-package pcidb
+package internal
 
 import (
 	"testing"
+
+	"github.com/jaypipes/pcidb/types"
 )
 
 func TestMergeOptions(t *testing.T) {
 	// Verify the default values are set if no overrides are passed
-	opts := mergeOptions()
+	opts := MergeOptions()
 	if opts.Chroot == nil {
 		t.Fatalf("Expected opts.Chroot to be non-nil.")
 	}
@@ -27,31 +29,17 @@ func TestMergeOptions(t *testing.T) {
 	}
 
 	// Verify if we pass an override, that value is used not the default
-	opts = mergeOptions(WithChroot("/override"))
+	opts = MergeOptions(types.WithChroot("/override"))
 	if opts.Chroot == nil {
 		t.Fatalf("Expected opts.Chroot to be non-nil.")
 	} else if *opts.Chroot != "/override" {
 		t.Fatalf("Expected opts.Chroot to be /override.")
 	}
 
-	opts = mergeOptions(WithDirectPath("/mnt/direct/pci.ids"))
+	opts = MergeOptions(types.WithDirectPath("/mnt/direct/pci.ids"))
 	if opts.Path == nil {
 		t.Fatalf("Expected opts.DirectPath to be non-nil.")
 	} else if *opts.Path != "/mnt/direct/pci.ids" {
 		t.Fatalf("Expected opts.DirectPath to be /mnt/direct/pci.ids")
-	}
-}
-
-func TestLoad(t *testing.T) {
-	// Start with a context with no search paths intentionally to test the
-	// disabling of the network fetch
-	ctx := &context{
-		enableNetworkFetch: false,
-		searchPaths:        []string{},
-	}
-	db := &PCIDB{}
-	err := db.load(ctx)
-	if err != ERR_NO_DB {
-		t.Fatalf("Expected ERR_NO_DB but got %s.", err)
 	}
 }
