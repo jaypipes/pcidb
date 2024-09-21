@@ -4,29 +4,30 @@
 // See the COPYING file in the root project directory for full text.
 //
 
-package pcidb_test
+package internal_test
 
 import (
 	"os"
 	"testing"
 
 	"github.com/jaypipes/pcidb"
+	"github.com/jaypipes/pcidb/types"
 )
 
-func TestPCI(t *testing.T) {
+func TestParse(t *testing.T) {
 	if _, ok := os.LookupEnv("GHW_TESTING_SKIP_PCI"); ok {
 		t.Skip("Skipping PCI tests.")
 	}
-	info, err := pcidb.New()
+	db, err := pcidb.New()
 	if err != nil {
-		t.Fatalf("Expected no error creating PciInfo, but got %v", err)
+		t.Fatalf("Expected no error creating pcidb.DB, but got %v", err)
 	}
 
-	if len(info.Classes) == 0 {
+	if len(db.Classes) == 0 {
 		t.Fatalf("Expected >0 PCI classes, but found 0.")
 	}
 
-	sbController, exists := info.Classes["0c"]
+	sbController, exists := db.Classes["0c"]
 	if !exists {
 		t.Fatalf("Expected to find serial bus controller class in hash for identifier '0c'")
 	}
@@ -38,7 +39,7 @@ func TestPCI(t *testing.T) {
 		t.Fatalf("Expected >0 Subclasses for sbController, but found 0.")
 	}
 
-	var firewireSubclass *pcidb.Subclass
+	var firewireSubclass *types.Subclass
 	for _, sc := range sbController.Subclasses {
 		if sc.ID == "00" {
 			firewireSubclass = sc
@@ -52,7 +53,7 @@ func TestPCI(t *testing.T) {
 	if len(firewireSubclass.ProgrammingInterfaces) == 0 {
 		t.Fatalf("Expected >0 Firewire programming interfaces, but found 0.")
 	}
-	var ohciIface *pcidb.ProgrammingInterface
+	var ohciIface *types.ProgrammingInterface
 	for _, progIface := range firewireSubclass.ProgrammingInterfaces {
 		if progIface.ID == "10" {
 			ohciIface = progIface
@@ -65,11 +66,11 @@ func TestPCI(t *testing.T) {
 		t.Fatalf("Expected OHCI programming interface name to be 'OHCI' but got '%v'", ohciIface.Name)
 	}
 
-	if len(info.Vendors) == 0 {
+	if len(db.Vendors) == 0 {
 		t.Fatalf("Expected >0 PCI vendors, but found 0.")
 	}
 
-	intelInc, exists := info.Vendors["8086"]
+	intelInc, exists := db.Vendors["8086"]
 	if !exists {
 		t.Fatalf("Expected to find Intel vendor in hash for identifier '8086'")
 	}
@@ -77,12 +78,12 @@ func TestPCI(t *testing.T) {
 		t.Fatalf("Expected Intel vendor name to be 'Intel Corporation' but got '%v'", intelInc.Name)
 	}
 
-	if len(info.Products) == 0 {
+	if len(db.Products) == 0 {
 		t.Fatalf("Expected >0 PCI products, but found 0.")
 	}
 
 	intel10GBackplaneKey := "808610f8"
-	intel10GBackplane, exists := info.Products[intel10GBackplaneKey]
+	intel10GBackplane, exists := db.Products[intel10GBackplaneKey]
 	if !exists {
 		t.Fatalf("Failed to find Intel 10GB Backplane Connection in products hash for key '808610f8'")
 	}
@@ -113,7 +114,7 @@ func TestPCI(t *testing.T) {
 	// \t1960  MegaRAID
 	// \t\t103c 60e7  NetRAID-1M
 	megaRaidProdKey := "101e1960"
-	megaRaidProd, exists := info.Products[megaRaidProdKey]
+	megaRaidProd, exists := db.Products[megaRaidProdKey]
 	if !exists {
 		t.Fatalf("Failed to find MegaRAID in products hash for key '101e1960'")
 	}
