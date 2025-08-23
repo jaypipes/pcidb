@@ -35,7 +35,7 @@ func main() {
 }
 ```
 
-> Learn about [how `pcidb` discovers `pci.ids` database files][#discovery].
+> Learn about (how `pcidb` discovers `pci.ids` database files)[#discovery].
 
 The `pcidb.PCIDB` struct contains a number of fields that may be queried for
 PCI information:
