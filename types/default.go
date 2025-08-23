@@ -10,8 +10,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-
-	"github.com/mitchellh/go-homedir"
 )
 
 const (
@@ -25,15 +23,10 @@ var (
 )
 
 func getCachePath() string {
-	hdir, err := homedir.Dir()
+	hdir, err := os.UserHomeDir()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed getting homedir.Dir(): %v", err)
+		fmt.Fprintf(os.Stderr, "Failed getting os.UserHomeDir(): %v", err)
 		return ""
 	}
-	fp, err := homedir.Expand(filepath.Join(hdir, ".cache", "pci.ids"))
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed expanding local cache path: %v", err)
-		return ""
-	}
-	return fp
+	return filepath.Join(hdir, ".cache", "pci.ids")
 }

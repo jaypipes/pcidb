@@ -4,10 +4,10 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/jaypipes/pcidb)](https://goreportcard.com/report/github.com/jaypipes/pcidb)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
-`pcidb` is a small Golang library for programmatic querying of PCI vendor,
-product and class information.
+`pcidb` is a small Go library for programmatic querying of PCI vendor, product
+and class information.
 
-We currently test `pcidb` on Linux, Windows and MacOSX.
+We test `pcidb` on Linux, Windows and MacOSX.
 
 ## Usage
 
