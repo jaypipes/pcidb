@@ -19,6 +19,31 @@ type Subclass = types.Subclass
 type ProgrammingInterface = types.ProgrammingInterface
 type WithOption = types.WithOption
 
+// WithChroot overrides the root directory used for discovery of pci-ids
+// database files.
+var WithChroot = types.WithChroot
+
+// WithCachePath overrides the directory that pcidb uses to look up
+// pre-found/pre-fetching pci.ids database files.
+var WithCachePath = types.WithCachePath
+
+// WithCacheOnly disables lookup of pci.ids database files over the network and
+// forces pcidb to only use any pre-cached pci.ids database files in its cache
+// directory.
+var WithCacheOnly = types.WithCacheOnly
+
+// WithPath overrides the pci.ids database file discovery and points pcidb at a
+// known location of a pci.ids or pci.ids.gz database file.
+var WithPath = types.WithPath
+
+// DEPRECATED. Here for backwards-compat
+var WithDirectPath = WithPath
+
+// WithEnableNetworkFetch enables the fetching of pci.ids database files over
+// the Internet if a pci.ids database file cannot be found on the host
+// filesystem or the pcidb cache directory.
+var WithEnableNetworkFetch = types.WithEnableNetworkFetch
+
 // Backward-compat, please refer to the pcidb types.DB type definition
 type PCIDB = types.DB
 

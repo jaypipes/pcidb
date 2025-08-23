@@ -30,22 +30,37 @@ type WithOption struct {
 	Path *string
 }
 
+// WithChroot overrides the root directory used for discovery of pci-ids
+// database files.
 func WithChroot(dir string) *WithOption {
 	return &WithOption{Chroot: &dir}
 }
 
+// WithCachePath overrides the directory that pcidb uses to look up
+// pre-found/pre-fetching pci.ids database files.
 func WithCachePath(path string) *WithOption {
 	return &WithOption{CachePath: &path}
 }
 
+// WithCacheOnly disables lookup of pci.ids database files over the network and
+// forces pcidb to only use any pre-cached pci.ids database files in its cache
+// directory.
 func WithCacheOnly() *WithOption {
 	return &WithOption{CacheOnly: &trueVar}
 }
 
-func WithDirectPath(path string) *WithOption {
+// WithPath overrides the pci.ids database file discovery and points pcidb at a
+// known location of a pci.ids or pci.ids.gz database file.
+func WithPath(path string) *WithOption {
 	return &WithOption{Path: &path}
 }
 
+// Backwards-compat
+var WithDirectPath = WithPath
+
+// WithEnableNetworkFetch enables the fetching of pci.ids database files over
+// the Internet if a pci.ids database file cannot be found on the host
+// filesystem or the pcidb cache directory.
 func WithEnableNetworkFetch() *WithOption {
 	return &WithOption{EnableNetworkFetch: &trueVar}
 }
