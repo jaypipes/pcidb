@@ -390,8 +390,8 @@ the local host.
 local host system in well-known filesystem paths (Linux and MacOS):
 
 * `/usr/share/hwdata/pci.ids`
-* `/usr/share/misc/pci.ids.gz`
-* `/usr/share/hwdata/pci.ids`
+* `/usr/share/misc/pci.ids`
+* `/usr/share/hwdata/pci.ids.gz`
 * `/usr/share/misc/pci.ids.gz`
 
 > **NOTE**: Windows does not have a `pci.ids` database file installed by
